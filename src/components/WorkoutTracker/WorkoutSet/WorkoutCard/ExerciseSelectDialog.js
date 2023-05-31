@@ -74,7 +74,7 @@ export default function ExerciseSelectDialog({
     var exerciseListItems = [[]];
     // solves autoComplete double click issue, groupedOptions goes blank on textfield double click
     if (focused && groupedOptions.length !== 0 && inputValue.length === 0) {
-      for (const key in groupedOptions) {
+      for (const key in groupedOptions.sort()) {
         let exercise_name = groupedOptions[key];
         if (count === 1) {
           exerciseListItems[index].push(exercise_name);
@@ -91,7 +91,7 @@ export default function ExerciseSelectDialog({
       groupedOptions.length !== 0 &&
       inputValue.length !== 0
     ) {
-      for (const key in groupedOptions) {
+      for (const key in groupedOptions.sort()) {
         let exercise_name = groupedOptions[key];
         if (count === 1) {
           exerciseListItems[index].push(exercise_name);
@@ -113,9 +113,9 @@ export default function ExerciseSelectDialog({
       exerciseListItems = exerciseCacheList;
     } else {
       // solves autoComplete double click issue, groupedOptions goes blank on textfield double click
-      for (const exercise_name in checked
-        ? fullExerciseList
-        : defaultExerciseList) {
+      for (const exercise_name of checked
+        ? Object.keys(fullExerciseList).sort()
+        : Object.keys(defaultExerciseList).sort()) {
         if (count === 1) {
           exerciseListItems[index].push(exercise_name);
           count = 0;
@@ -127,7 +127,8 @@ export default function ExerciseSelectDialog({
         }
       }
     }
-    return exerciseListItems;
+    console.log(exerciseListItems);
+    return exerciseListItems.sort();
   }
 
   useEffect(() => {
