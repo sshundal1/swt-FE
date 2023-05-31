@@ -95,6 +95,7 @@ const WorkoutTracker = () => {
             apiLoading={apiLoading}
             fetchFullExerciseList={fetchFullExerciseList}
             defaultExerciseList={defaultExerciseList}
+            setDefaultExerciseList={setDefaultExerciseList}
             fullExerciseList={fullExerciseList}
           />
         </Box>

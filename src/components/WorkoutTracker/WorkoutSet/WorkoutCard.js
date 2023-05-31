@@ -28,6 +28,7 @@ const WorkoutCard = ({
   handleDuplicate,
   handleDelete,
   defaultExerciseList,
+  setDefaultExerciseList,
   fullExerciseList,
   handleSwitchChange,
 }) => {
@@ -77,11 +78,11 @@ const WorkoutCard = ({
               setUserWorkoutLog={setUserWorkoutLog}
               userWorkoutLog={userWorkoutLog}
               cardNumber={cardNumber}
-              exerciseList={exerciseList}
               editButtonSelect={false}
               exerciseListItems={exerciseListItems}
               fetchFullExerciseList={fetchFullExerciseList}
               defaultExerciseList={defaultExerciseList}
+              setDefaultExerciseList={setDefaultExerciseList}
               fullExerciseList={fullExerciseList}
               handleSwitchChange={handleSwitchChange}
             />
@@ -145,9 +146,13 @@ const WorkoutCard = ({
                 setUserWorkoutLog={setUserWorkoutLog}
                 userWorkoutLog={userWorkoutLog}
                 cardNumber={cardNumber}
-                exerciseList={exerciseList}
                 editButtonSelect={true}
                 exerciseListItems={exerciseListItems}
+                setDefaultExerciseList={setDefaultExerciseList}
+                fetchFullExerciseList={fetchFullExerciseList}
+                defaultExerciseList={defaultExerciseList}
+                fullExerciseList={fullExerciseList}
+                handleSwitchChange={handleSwitchChange}
               />
             </Box>
           </Box>
