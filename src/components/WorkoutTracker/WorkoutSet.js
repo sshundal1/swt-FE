@@ -13,6 +13,7 @@ const WorkoutSet = ({
   apiLoading,
   fetchFullExerciseList,
   defaultExerciseList,
+  setDefaultExerciseList,
   fullExerciseList,
   setExerciseList,
 }) => {
@@ -172,6 +173,7 @@ const WorkoutSet = ({
                   handleDuplicate={handleDuplicate}
                   handleDelete={handleDelete}
                   defaultExerciseList={defaultExerciseList}
+                  setDefaultExerciseList={setDefaultExerciseList}
                   fullExerciseList={fullExerciseList}
                   handleSwitchChange={handleSwitchChange}
                 />

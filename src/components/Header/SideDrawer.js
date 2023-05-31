@@ -16,7 +16,7 @@ export default function SideDrawer({ state, setState, toggleDrawer }) {
   let master = {
     Home: "/",
     "Workout Tracker": "/WorkoutTracker",
-    "Workout History": "/WorkoutHistory",
+    "Workout History": "/WorkoutHistory"
   };
   const list = (anchor) => (
     <Box
@@ -26,7 +26,7 @@ export default function SideDrawer({ state, setState, toggleDrawer }) {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {["Home", "Workout Tracker", "Workout History"].map((text, index) => (
+        {Object.keys(master).map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton LinkComponent={Link} to={master[text]}>
               <ListItemText
