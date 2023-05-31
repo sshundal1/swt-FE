@@ -160,6 +160,13 @@ export default function ExerciseSelectDialog({
   function handleFavoriteSwitch(exercise_name, exercise_id) {
     if (exercise_name in userFavoriteChanges) {
       delete userFavoriteChanges[exercise_name];
+      if (checkIfExerciseIsFavorite(exercise_name)) {
+        delete defaultExerciseList[exercise_name];
+        setDefaultExerciseList({ ...defaultExerciseList });
+      } else {
+        defaultExerciseList[exercise_name] = fullExerciseList[exercise_name];
+        setDefaultExerciseList({ ...defaultExerciseList });
+      }
     } else {
       if (checkIfExerciseIsFavorite(exercise_name)) {
         //check if favorite or not to adjust accordingly (default True equal change to favorite)
