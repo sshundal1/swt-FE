@@ -73,6 +73,13 @@ export default function ExerciseSelectDialog({
       clearOnBlur: false,
     });
 
+  useEffect(() => {
+    //hacky fix to deal w/ keep variable set. Sets a "cache" b/c when the autocomplete not focused, grouped options -> []
+    if (focused) {
+      setExerciseCacheList(groupedOptions);
+    }
+  }, [focused, inputValue]);
+
   function generateExerciseListItems() {
     var exerciseListItems = [[]];
     // solves autoComplete double click issue, groupedOptions goes blank on textfield double click
@@ -113,32 +120,44 @@ export default function ExerciseSelectDialog({
     ) {
       exerciseListItems = [];
     } else if (!focused && inputValue.length !== 0) {
-      exerciseListItems = exerciseCacheList;
+      //when not focused, groupedOptions goes to [], set to last saved options value we had
+      //must handle if checked val changes, if statement added accordingly
+      for (const exercise_name of exerciseCacheList) {
+        if (
+          exercise_name in (checked ? fullExerciseList : defaultExerciseList)
+        ) {
+          if (count === 1) {
+            exerciseListItems[index].push(exercise_name);
+            count = 0;
+            index++;
+            exerciseListItems[index] = [];
+          } else {
+            count++;
+            exerciseListItems[index].push(exercise_name);
+          }
+        }
+      }
     } else {
       // solves autoComplete double click issue, groupedOptions goes blank on textfield double click
-      for (const exercise_name of checked
-        ? Object.keys(fullExerciseList).sort()
-        : Object.keys(defaultExerciseList).sort()) {
-        if (count === 1) {
-          exerciseListItems[index].push(exercise_name);
-          count = 0;
-          index++;
-          exerciseListItems[index] = [];
-        } else {
-          count++;
-          exerciseListItems[index].push(exercise_name);
+      if (typeof exerciseListItems !== "undefined") {
+        //was having issues w/ renders, needed this
+        for (const exercise_name of checked
+          ? Object.keys(fullExerciseList).sort()
+          : Object.keys(defaultExerciseList).sort()) {
+          if (count === 1) {
+            exerciseListItems[index].push(exercise_name);
+            count = 0;
+            index++;
+            exerciseListItems[index] = [];
+          } else {
+            count++;
+            exerciseListItems[index].push(exercise_name);
+          }
         }
       }
     }
     return exerciseListItems.sort();
   }
-
-  useEffect(() => {
-    //hacky fix to deal w/ keep variable set
-    if (focused && generateExerciseListItems.length > 0) {
-      setExerciseCacheList(generateExerciseListItems);
-    }
-  }, [focused]);
 
   function handleSwitch() {
     if (!checked && Object.keys(fullExerciseList).length === 0) {
