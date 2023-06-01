@@ -21,6 +21,7 @@ import Switch from "@mui/material/Switch";
 import { Box } from "@mui/material";
 import StarIcon from "@mui/icons-material/Star";
 import StarOutlineIcon from "@mui/icons-material/StarOutline";
+import { useAuth0 } from "@auth0/auth0-react";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -60,6 +61,8 @@ export default function ExerciseSelectDialog({
   };
 
   const [exerciseCacheList, setExerciseCacheList] = useState([[]]);
+
+  const { getAccessTokenSilently } = useAuth0();
 
   let count = 0;
   let index = 0;
@@ -127,7 +130,6 @@ export default function ExerciseSelectDialog({
         }
       }
     }
-    console.log(exerciseListItems);
     return exerciseListItems.sort();
   }
 
@@ -171,23 +173,37 @@ export default function ExerciseSelectDialog({
     } else {
       if (checkIfExerciseIsFavorite(exercise_name)) {
         //check if favorite or not to adjust accordingly (default True equal change to favorite)
-        userFavoriteChanges[exercise_name] = {
-          exercise_id: exercise_id,
-          default: false,
-        };
+        userFavoriteChanges[exercise_name] = exercise_id;
         delete defaultExerciseList[exercise_name];
         setDefaultExerciseList({ ...defaultExerciseList });
       } else {
-        userFavoriteChanges[exercise_name] = {
-          exercise_id: exercise_id,
-          default: true,
-        };
+        userFavoriteChanges[exercise_name] = exercise_id;
         defaultExerciseList[exercise_name] = fullExerciseList[exercise_name];
         setDefaultExerciseList({ ...defaultExerciseList });
       }
     }
     setUserFavoriteChanges({ ...userFavoriteChanges });
   }
+
+  const postFavoriteChanges = async () => {
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${await getAccessTokenSilently()}`,
+      },
+      body: JSON.stringify(userFavoriteChanges),
+    };
+    fetch(process.env.REACT_APP_AWS_EXERCISES_POST, requestOptions)
+      .then((response) => response.json())
+      .then((data) => setUserFavoriteChanges({}));
+  };
+
+  useEffect(() => {
+    if (!open && Object.keys(userFavoriteChanges).length > 0) {
+      postFavoriteChanges();
+    }
+  }, [open, userFavoriteChanges]);
 
   return (
     <>
